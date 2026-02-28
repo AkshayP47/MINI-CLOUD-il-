@@ -6,8 +6,13 @@ from config import Config
 from models import db, User, File
 from flask_wtf import CSRFProtect
 
-app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+app = Flask(__name__, static_folder=os.path.join(basedir, 'static'), template_folder=os.path.join(basedir, 'templates'))
 app.config.from_object(Config)
+
+# Ensure directories exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.static_folder, exist_ok=True)
 
 db.init_app(app)
 login_manager = LoginManager(app)
